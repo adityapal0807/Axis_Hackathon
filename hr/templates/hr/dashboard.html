@@ -2,15 +2,24 @@
 
 {% block body %}
 <h1>DashBoard</h1>
-<div>
-    <div>
+<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+    <div >
         <div class="card" style="width: 18rem;">
             <div class="card-body">
               <h5 class="card-title">Create new JD</h5>
               <p class="card-text">create a new job profile from scratch</p>
-              <a href="{% url 'jd_description_analyser' %}" class="btn btn-primary">Go somewhere</a>
+              <a href="{% url 'jd_description_analyser' %}" class="btn btn-primary">Proceed</a>
             </div>
           </div>
+    </div>
+    <div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Analyse resumes</h5>
+              <p class="card-text">analyse resumes from given jd options</p>
+              <a href="{% url 'analyse_resumes' %}" class="btn btn-primary">Proceed</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
 from django.core import serializers
+from .forms import *
 
 from .models import User,Job_Description,Applied_resume,Application_status
 # Create your views here.
@@ -96,6 +97,22 @@ def jd_description_analyser(request):
 
         # and then show the response
         return render (request, 'hr/jd.html')
+
+def analyse_resumes(request):
+    if request.method=="POST":
+        form = jd_submission_form(request.POST, request.FILES)
+        if form.is_valid():
+            # Process the form data
+            dropdown_item = form.cleaned_data['dropdown_field']
+            pdf_files = request.FILES.getlist('pdf_files')
+            # print(dropdown_item)
+            # print(len(pdf_files))
+            
+            # after this should redirect to new page with analysed resumes and their rankings
+        return render(request, 'hr/analyse_resumes.html')
+    else:
+        form= jd_submission_form()
+        return render(request, 'hr/analyse_resumes.html', context={'form':form})
 
 def show_jd_function(request,jd_id):
     if request.method == "GET":
