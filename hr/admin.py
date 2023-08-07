@@ -7,3 +7,4 @@ class JobDescriptionAdmin(admin.ModelAdmin):
     list_display = ('created_at', 'updated_at', 'hr_id', 'job_description', 'recommendation_used')
 
 admin.site.register(Applied_resume)
+# admin.site.register(Application_status)

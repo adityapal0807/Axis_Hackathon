@@ -25,7 +25,7 @@ class BaseFields(models.Model):
 class Job_Description(BaseFields):
     hr_id = models.ForeignKey(User,on_delete=models.CASCADE,related_name='hr_id')
     jd_title= models.CharField(max_length= 100, null=True)
-    job_description = models.TextField(max_length=5000)
+    job_description = models.JSONField()
     recommendation_used = models.BooleanField(default=False)
 
     def _str_(self):
@@ -34,7 +34,7 @@ class Job_Description(BaseFields):
 class Applied_resume(BaseFields):
     # hr_user= models.ForeignKey(Hr_data, on_delete=models.CASCADE)
     jd_id= models.ForeignKey(Job_Description, on_delete=models.CASCADE,related_name='jd_id')
-    resume_text= models.TextField(max_length=2000)
+    resume_text= models.JSONField()
     applicant_email= models.EmailField(null=True, blank=True)
     resume_score= models.IntegerField(null=True, blank=True)
     resume_rank= models.IntegerField(null=True, blank=True)

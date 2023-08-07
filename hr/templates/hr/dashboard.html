@@ -1,8 +1,16 @@
 {% extends 'hr/layout.html' %}
 
 {% block body %}
-<h1>JDS</h1>
-{% for jd in jds %}
-    <p>{{jd.created_at}}</p>
-{% endfor %}
+<h1>DashBoard</h1>
+<div>
+    <div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Create new JD</h5>
+              <p class="card-text">create a new job profile from scratch</p>
+              <a href="{% url 'jd_description_analyser' %}" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
+    </div>
+</div>
 {% endblock %}

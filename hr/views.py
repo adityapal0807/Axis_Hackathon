@@ -87,11 +87,15 @@ def jd_description_analyser(request):
     elif request.method=="POST":
         #the api has posted a job description
 
+        # checking from response
+        print(request.POST['jobTitle'])
+
         """
             Analyse the form data over here and save the job description with other parameters
         """
 
         # and then show the response
+        return render (request, 'hr/jd.html')
 
 def show_jd_function(request,jd_id):
     if request.method == "GET":
