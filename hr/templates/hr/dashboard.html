@@ -1,5 +1,8 @@
 {% extends 'hr/layout.html' %}
 
 {% block body %}
-You are now logged in
+<h1>JDS</h1>
+{% for jd in jds %}
+    <p>{{jd.created_at}}</p>
+{% endfor %}
 {% endblock %}

@@ -8,4 +8,5 @@ urlpatterns = [
     path("register", views.register, name="register"),
 
     # API ROUTES
+    path('dashboard/jd_description',views.jd_description_analyser,name='jd_description_analyser')
 ]

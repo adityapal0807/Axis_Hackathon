@@ -6,9 +6,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import User
 from django.db import IntegrityError
+from django.core import serializers
 
+from .models import User,Job_Description,Applied_resume,Application_status
 # Create your views here.
 
 def landing_page(request):
@@ -23,7 +24,10 @@ def landing_page(request):
 
 @login_required
 def index(request):
-    return render(request,'hr/dashboard.html')
+    jds=Job_Description.objects.all()
+    return render(request,'hr/dashboard.html',{
+        'jds':jds
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -72,9 +76,26 @@ def register(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("landing_page"))
-
-
 """
 API ROUTES HERE
 """
 
+
+def jd_description_analyser(request):
+    if request.method == "GET":
+        return render(request,'hr/jd.html')
+    elif request.method=="POST":
+        #the api has posted a job description
+
+        """
+            Analyse the form data over here and save the job description with other parameters
+        """
+
+        # and then show the response
+
+def show_jd_function(request,jd_id):
+    if request.method == "GET":
+        try:
+            jd = Job_Description.objects.get(id=jd_id)
+        except:
+            return JsonResponse()
