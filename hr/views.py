@@ -130,3 +130,6 @@ def analyse_js_api(request):
 
         response = jd_suggestor(str(job_description))
         return JsonResponse(response,safe=False)
+    
+def a(request):
+    pass
