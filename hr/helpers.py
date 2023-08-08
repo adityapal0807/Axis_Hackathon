@@ -7,25 +7,24 @@ import os
 from dotenv import load_dotenv
 import json
 import ast
+from io import BytesIO
 
 
 from .prompts import sample_job_description,initial_prompt,resume_ranker,question_generator,role_resume_score,role_resume_ranker,resume_prompt_data,role_jd_suggestor,jd_prompt_creator
 
 load_dotenv()
 
-def convert_to_text(file_path):
-    file_name, file_extension = os.path.splitext(file_path)
-
+def convert_to_text(file_data, file_extension):
     if file_extension == '.docx':
-        return convert_docx_to_text(file_path)
+        return convert_docx_to_text(file_data)
     elif file_extension == '.pdf':
-        return convert_pdf_to_text(file_path)
+        return convert_pdf_to_text(file_data)
     else:
         return None
 
 def convert_docx_to_text(docx_file):
     try:
-        doc = docx.Document(docx_file)
+        doc = docx.Document(BytesIO(docx_file.read()))
         full_text = []
         for paragraph in doc.paragraphs:
             full_text.append(paragraph.text)
@@ -36,7 +35,7 @@ def convert_docx_to_text(docx_file):
     
 def convert_pdf_to_text(pdf_file):
     try:
-        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        pdf_reader = PyPDF2.PdfReader(BytesIO(pdf_file.read()))
         # Extract text from each page of the PDF
         extracted_text = ''
         for page in pdf_reader.pages:
@@ -111,20 +110,18 @@ def resume_scorer(job_description,resume_text,model_name='gpt-3.5-turbo',tempera
                     'messages': roles,
                 },
             )
+    response_data = json.loads(response.text)
     try:
-        response_data = json.loads(response.text)
         # Extract the 'content' field from the 'message' dictionary
         content = response_data['choices'][0]['message']['content']
-        content = ast.literal_eval(content)
+        content = json.loads(content)
         return content
 
     except Exception as e:
         print(f"Model Error: {e}")
-        return {'Error':'Model ke L Lag ge'}
+        return {'Error':response_data}
     
-def resume_ranker(job_description,combined_resume_json,model_name='gpt-3.5-turbo',temperature=0.7):
-
-    RANKED_RESUME = []
+def rank_resume(job_description,combined_resume_json,model_name='gpt-3.5-turbo',temperature=0.7):
 
     #setting up the roles for model
     system_role = role_resume_ranker
@@ -144,20 +141,18 @@ def resume_ranker(job_description,combined_resume_json,model_name='gpt-3.5-turbo
                     'messages': roles,
                 },
             )
+    response_data = json.loads(response.text)
     try:
-        response_data = json.loads(response.text)
 
         # Extract the 'content' field from the 'message' dictionary
         content = response_data['choices'][0]['message']['content']
-        content = str(content).split('\n')
-        for a in content:
-            if len(a) >3:
-                RANKED_RESUME.append(ast.literal_eval(a))
-        return RANKED_RESUME
+        content = str(content).replace('\n','')
+        content = json.loads(content)
+        return content
 
     except Exception as e:
         print(f"Model Error: {e}")
-        return {'Error':'Model ke L Lag ge'}
+        return {'Error':response_data}
     
 
 

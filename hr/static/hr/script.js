@@ -22,16 +22,16 @@ document.addEventListener("DOMContentLoaded", function () {
             var requirements = document.getElementById('requirements').value;
             var skills = document.getElementById('skills').value;
             var aboutCompany = document.getElementById('aboutCompany').value;
-            var eligibility = document.getElementById('eligibility').value;
+            var Responsibilities = document.getElementById('responsibilities').value;
 
             var inputData = [
                 "TITLE : " + jobTitle,
                 "REQUIREMENTS : " + requirements,
                 "SKILLS : " + skills,
                 "ABOUT COMPANY : " + aboutCompany,
-                "ELIGIBILITY : " + eligibility
+                "RESPONSIBILITY : " + Responsibilities
             ];
-
+            
             var job_description = inputData.join('\n');
             console.log(job_description);
 

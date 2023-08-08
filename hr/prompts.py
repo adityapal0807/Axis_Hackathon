@@ -38,7 +38,7 @@ role_resume_score = """
 role_resume_ranker = f"""
     {role_resume_score} + \n 
     You are now provided with a json objects containing score of a resume, a short summary and level which have been assigned before. Use this data to do the following:
-    Please rank the candidates based on their overall suitability and score for the job. If the resume scores clash, then rank in the most efficient and optimal way such as educational institute, better projects, more experience etc.
+    Please rank the candidates based on their overall suitability and score for the job. If the resume scores clash, then rank in the most efficient and optimal way such as educational institute, better projects, more experience etc.Level parameter must be used.
 """
 
 def initial_prompt(job_description,resume_text):
@@ -57,20 +57,20 @@ def initial_prompt(job_description,resume_text):
 
         Assign a score between 0 and 1, where 0 indicates no relevance to the job description and 1 indicates an excellent match. Please provide a meaningful and fair assessment to help in the ranking process.
         Also generate a small summary summarizing an overall response to the resume and also allot a level such as beginner intermediate or advances based on experience and skills.
-        Please provide your response in the following format:\n['Person Name', 'Short Summary', 'Score', 'Level']\nFor example:\n['abc', 'some skills here', '0.1', 'Intermediate']
+        Please provide your response inside a dictionary with keys exactly same of the following format:("Person_Email_ID", "Score", "Short_Summary","level")
     """
     return prompt
 
 def resume_ranker(job_description,resumes_json_data):
     prompt =  """
         
-        Job Description""" + str(job_description) + """
+        Job Description \n""" + str(job_description) + """\n
 
-        Combined Resume Data""" + str(resumes_json_data) + """
+        Combined Resume Data\n""" + str(resumes_json_data) + """\n
 
         While Ranking the Resumes, also provide a justified reason that why the particular resume is ranked at that position as compared to other resumes.The reason specified must be clear and justified.
-
-        Please provide your response inside a list and each list element must be of the following format:\n['Person Name', 'Rank', 'Reason for Ranking at this position']\nFor example:\n['abc', 'rank number here', 'a reason for the rank here']
+        
+        Please provide your response inside a list of dictionary with keys exactly same of the following format:("Person_Email_ID", "Rank", "Score" , "Reason(contains the reason for the given rank)", "Short_Summary","level") so that it helps extracting later using json.loads. Keys must be enclosed in doubleqoutes,not single.
         """
     return prompt
 
