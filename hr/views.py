@@ -9,7 +9,8 @@ from django.urls import reverse
 from django.db import IntegrityError
 from django.core import serializers
 import json
-from .helpers import jd_suggestor
+import os
+from .helpers import jd_suggestor,convert_to_text,resume_scorer,rank_resume
 from .forms import *
 from .models import User,Job_Description,Applied_resume,Application_status
 # Create your views here.
@@ -104,13 +105,26 @@ def analyse_resumes(request):
         form = jd_submission_form(request.POST, request.FILES)
         if form.is_valid():
             # Process the form data
+            objects = []
             dropdown_item = form.cleaned_data['dropdown_field']
+            job_description = dropdown_item.job_description
             pdf_files = request.FILES.getlist('pdf_files')
-            # print(dropdown_item)
-            # print(len(pdf_files))
+            print(dropdown_item.job_description)
+            print(len(pdf_files))
+            for pdf in pdf_files:
+                file_extension = os.path.splitext(pdf.name)[-1].lower()
+                content = resume_scorer(job_description,convert_to_text(pdf, file_extension))
+                objects.append(content)
+            print(objects)
+            # ranking the documents
+
+            ranking_data = rank_resume(job_description,objects,)
+            print(ranking_data)
             
             # after this should redirect to new page with analysed resumes and their rankings
-        return render(request, 'hr/analyse_resumes.html')
+        return render(request, 'hr/analyse_resumes.html',{
+            'objects':ranking_data
+        })
     else:
         form= jd_submission_form()
         return render(request, 'hr/analyse_resumes.html', context={'form':form})
