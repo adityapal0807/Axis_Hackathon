@@ -6,7 +6,8 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
+    path('dashboard/jd_description',views.jd_description_analyser,name='jd_description_analyser'),
 
     # API ROUTES
-    path('dashboard/jd_description',views.jd_description_analyser,name='jd_description_analyser')
+    path('api/analyse_jd',views.analyse_js_api,name='analyse_jd')
 ]

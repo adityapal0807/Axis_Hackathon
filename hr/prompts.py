@@ -248,13 +248,13 @@ role_jd_suggestor = """
     Through my expertise, I have witnessed the transformative power of well-crafted job descriptions, which have not only streamlined the hiring process but also contributed to the overall success of organizations. Leveraging my experience and knowledge, I am dedicated to assisting your team in creating job descriptions that go beyond mere job requirements and embrace the essence of your company's vision, fostering a cohesive and thriving workforce."
 """
 
-def jd_suggestor(job_description):
+def jd_prompt_creator(job_description):
     return f"""
         Job Description 
         {job_description}
 
         Provide me an Overall Score , Overall Review, Strong Points For my JD, Weak points for existing Job Description in short and suggest some insighfull changes that can help attract great talent.
-        Please provide your response inside a list and each list element must be of the following format:\n['Overall Score', 'Overall Review', 'Pros/Strong Points','Cons/Weak Points','Suggestions']\nFor example:\n['10', 'good jd', 'strong','weak',['list of suggestions']]
+        Please provide your response inside a dictionary with keys exactly same of the following format:('Overall Score', 'Overall Review', 'Pros','Cons','Suggestions(list of suggestions)']
 
     """
 

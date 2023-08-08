@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
 from django.core import serializers
-
+import json
+from .helpers import jd_suggestor
 from .models import User,Job_Description,Applied_resume,Application_status
 # Create your views here.
 
@@ -103,3 +104,12 @@ def show_jd_function(request,jd_id):
             jd = Job_Description.objects.get(id=jd_id)
         except:
             return JsonResponse()
+
+@csrf_exempt
+def analyse_js_api(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        job_description = data['job_description']
+
+        response = jd_suggestor(str(job_description))
+        return JsonResponse(response,safe=False)

@@ -2,31 +2,55 @@
 
 {% block body %}
 
-<div class="container mt-5">
-    <h2>Job Description Form</h2>
-    <form method="post" action="">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="jobTitle">Job Title</label>
-            <input type="text" class="form-control" id="jobTitle" name="jobTitle" required>
+<style>
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+</style>
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-6" id="analyse_details" style="display: none;">
+            <div class="analysed">
+                <p id="analyse_score"></p>
+                <p id="overall_review"></p>
+                <p id="pros"></p>
+                <p id="cons"></p>
+                <p id="suggestions"></p>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="aboutCompany">About the Company</label>
-            <textarea class="form-control" id="aboutCompany" name="aboutCompany" rows="3" required></textarea>
+        <div class="col-md-6" id="analyse_form_div">
+            <h2>Job Description Form</h2>
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="jobTitle">Job Title</label>
+                    <input type="text" class="form-control" id="jobTitle" name="jobTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="skills">Skills</label>
+                    <textarea class="form-control" name="skills" id="skills"  rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="responsibilities">Responsibilities</label>
+                    <textarea class="form-control" id="responsibilities" name="responsibilities" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="requirements">Requirements</label>
+                    <textarea class="form-control" id="requirements" name="requirements" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="aboutCompany">About the Company</label>
+                    <textarea class="form-control" id="aboutCompany" name="aboutCompany" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <button class="btn btn-primary" id="analyse_button">Analyse</button>
         </div>
-        <div class="form-group">
-            <label for="skills">Skills</label>
-            <input type="text" class="form-control" id="skills" name="skills" required>
-        </div>
-        <div class="form-group">
-            <label for="requirements">Requirements</label>
-            <textarea class="form-control" id="requirements" name="requirements" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="eligibility">Eligibility</label>
-            <textarea class="form-control" id="eligibility" name="eligibility" rows="3" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
+    
+    
 
 {% endblock %}

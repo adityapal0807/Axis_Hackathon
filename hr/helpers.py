@@ -9,7 +9,7 @@ import json
 import ast
 
 
-from prompts import sample_job_description,initial_prompt,resume_ranker,question_generator,role_resume_score,role_resume_ranker,resume_prompt_data,role_jd_suggestor,jd_suggestor
+from .prompts import sample_job_description,initial_prompt,resume_ranker,question_generator,role_resume_score,role_resume_ranker,resume_prompt_data,role_jd_suggestor,jd_prompt_creator
 
 load_dotenv()
 
@@ -63,14 +63,14 @@ def jd_suggestor(job_description,model_name='gpt-3.5-turbo',temperature=0.7):
 
     #setting up the roles for model
     system_role = role_jd_suggestor
-    user_role = jd_suggestor(job_description=job_description)
+    user_role = jd_prompt_creator(job_description=job_description)
 
     roles = role_classifier(system_role=system_role,user_role=user_role)
 
     response = requests.post(
                     'https://api.openai.com/v1/chat/completions',
                     headers={
-                        'Authorization': f'Bearer {os.getenv("OPENAI_API_KEY")}',
+                        'Authorization': f'Bearer {os.getenv(f"OPENAI_API_KEY")}',
                         'Content-Type': 'application/json',
                     },
                     json={
@@ -79,15 +79,17 @@ def jd_suggestor(job_description,model_name='gpt-3.5-turbo',temperature=0.7):
                         'messages': roles,
                     },
                 )
+    response_data = json.loads(response.text)
     try:
-        response_data = json.loads(response.text)
         
         # Extract the 'content' field from the 'message' dictionary
         content = response_data['choices'][0]['message']['content']
+        content = str(content).replace('\n','')
+        content = ast.literal_eval(content)
         return content
     except Exception as e:
         print(f"Model Error: {e}")
-        return {'Error':'Model ke L Lag ge'}
+        return {'Error':response_data}
 
 def resume_scorer(job_description,resume_text,model_name='gpt-3.5-turbo',temperature=0.7):
 
