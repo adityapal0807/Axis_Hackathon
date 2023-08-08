@@ -8,7 +8,9 @@ from dotenv import load_dotenv
 import json
 import ast
 from io import BytesIO
-
+from django.conf import settings
+from django.core.mail import send_mail
+import uuid
 
 from .prompts import sample_job_description,initial_prompt,resume_ranker,question_generator,role_resume_score,role_resume_ranker,resume_prompt_data,role_jd_suggestor,jd_prompt_creator
 
@@ -153,6 +155,29 @@ def rank_resume(job_description,combined_resume_json,model_name='gpt-3.5-turbo',
     except Exception as e:
         print(f"Model Error: {e}")
         return {'Error':response_data}
+    
+def candidate_login_credential(email,password):
+    subject = 'Forget Password Link'
+    message = f""" 
+        Hi {email},
+
+        These are your credentials for the test.
+
+        Login Email : {email}
+        Password : {password}
+
+        If you did not make this request then please ignore this email.
+        http://127.0.0.1:8000/candidate/test
+
+        """
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email]
+    send_mail(subject,message,email_from,recipient_list)
+    return True
+
+
+    
+    
     
 
 
