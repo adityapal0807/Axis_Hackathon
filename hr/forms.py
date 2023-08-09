@@ -6,7 +6,7 @@ from django.core.validators import FileExtensionValidator
 
 class jd_submission_form(forms.Form):
     dropdown_field = forms.ModelChoiceField(
-        queryset=Job_Description.objects.all(),
+        queryset=Job_Description.objects.all().order_by('-created_at'),
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 

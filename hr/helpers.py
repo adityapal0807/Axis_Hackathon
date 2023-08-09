@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 import uuid
 
-from .prompts import sample_job_description,initial_prompt,resume_ranker,question_generator,role_resume_score,role_resume_ranker,resume_prompt_data,role_jd_suggestor,jd_prompt_creator
+from .prompts import sample_job_description,initial_prompt,resume_ranker,question_generator,role_resume_score,role_resume_ranker,resume_prompt_data,role_jd_suggestor,jd_prompt_creator,role_question_generator,question_generator
 
 load_dotenv()
 
@@ -142,6 +142,39 @@ def rank_resume(job_description,combined_resume_json,model_name='gpt-3.5-turbo',
                     'temperature': temperature,
                     'messages': roles,
                 },
+            )
+    response_data = json.loads(response.text)
+    try:
+
+        # Extract the 'content' field from the 'message' dictionary
+        content = response_data['choices'][0]['message']['content']
+        content = str(content).replace('\n','')
+        content = json.loads(content)
+        return content
+
+    except Exception as e:
+        print(f"Model Error: {e}")
+        return {'Error':response_data}
+    
+def generate_questions(job_description,model_name='gpt-3.5-turbo',temperature=0.7):
+    #setting up the roles for model
+    system_role = role_question_generator
+    user_role = question_generator(job_description=job_description)
+
+    roles = role_classifier(system_role=system_role,user_role=user_role)
+
+    response = requests.post(
+                'https://api.openai.com/v1/chat/completions',
+                headers={
+                    'Authorization': f'Bearer {os.getenv("OPENAI_API_KEY")}',
+                    'Content-Type': 'application/json',
+                },
+                json={
+                    'model': model_name,
+                    'temperature': temperature,
+                    'messages': roles,
+                },
+                stream=False
             )
     response_data = json.loads(response.text)
     try:

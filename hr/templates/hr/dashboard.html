@@ -21,5 +21,18 @@
             </div>
         </div>
     </div>
+    <div>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Track Existing JD's</h5>
+              <p class="card-text">analyse resumes from given jd options</p>
+              <ul>
+                {% for jd in jds %}
+                  <li><a href="{% url 'jd_progress' jd.id %}" class="btn btn-primary">{{jd.jd_title}}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -8,7 +8,12 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path('dashboard/jd_description',views.jd_description_analyser,name='jd_description_analyser'),
     path("analyse_resumes", views.analyse_resumes, name="analyse_resumes"),
+    path('JDProgress/<str:jd_id>',views.JD_Progress,name='jd_progress'),
 
     # API ROUTES
-    path('api/analyse_jd',views.analyse_js_api,name='analyse_jd')
+    path('api/analyse_jd',views.analyse_js_api,name='analyse_jd'),
+
+    #candidate
+    path('candidate',views.candidate_login,name='candidate_login'),
+    path('candidate/test',views.candidate_test_window,name='candidate_test_window')
 ]

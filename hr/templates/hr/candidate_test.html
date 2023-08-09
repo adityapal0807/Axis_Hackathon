@@ -1,0 +1,62 @@
+{% extends 'hr/candidate_layout.html' %}
+
+{% block body %}
+    <div class="container-fluid">
+        Test is being taken here for this candidate
+        {{request.user}}
+        <div class="row">
+            <div class="col-md-5">
+                <h1>JD Description</h1>
+
+                <b>Job Title</b>
+                <p>{{job_description.job_title}}</p>
+                <b>Skills</b>
+                <p>{{job_description.skills}}</p>
+                <b>Responsibilities</b>
+                <p>{{job_description.responsibilities}}</p>
+                <b>Responsibilities</b>
+                <p>{{job_description.responsibilities}}</p>
+                <b>Requirements</b>
+                <p>{{job_description.requirements}}</p>
+                <b>About Company</b>
+                <p>{{job_description.about_company}}</p>
+                
+            </div>
+            <div class="col-md-7">
+                {% if test_taken %}
+                    <h1>Test already Taken</h1>
+                    <p>You can't attempt this test again</p>
+
+                    <h1>Chatbot</h1>
+                    <hr>
+
+                {% else %}
+                <hr>
+                <h1>Questions </h1>
+                <div id="timer">Time remaining: <span id="time">00:00</span></div>
+                <form id="test-form" method="post" action="{% url 'candidate_test_window' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="start_time" id="start_time" value="">
+                    {% for question in questions_json %}
+                      <p>{{ question.question }}</p>
+                      <ul>
+                        <li>{{ question.options.0 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="0"></li>
+                        <li>{{ question.options.1 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="1"></li>
+                        <li>{{ question.options.2 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="2"></li>
+                        <li>{{ question.options.3 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="3"></li>
+                      </ul>
+                    {% endfor %}
+                    <button type="submit" id="submit-button">Submit</button>
+                  </form>
+                <hr>
+                {% endif %}
+            </div>
+        </div>
+        
+        
+        
+        
+
+
+    </div>
+{% endblock %}
