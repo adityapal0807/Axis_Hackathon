@@ -74,25 +74,36 @@ def resume_ranker(job_description,resumes_json_data):
         """
     return prompt
 
-def question_generator(job_description,resume_text):
-    return f"""
-        You are an HR manager conducting a mock test for evaluating candidates applying for a job at [Company Name]. The test will assess their knowledge and skills in line with the job description and their resume information. Below is the job description:
+role_resume_ranker = f"""
+    {role_resume_score} + \n 
+    You are now provided with a json objects containing score of a resume, a short summary and level which have been assigned before. Use this data to do the following:
+    Please rank the candidates based on their overall suitability and score for the job. If the resume scores clash, then rank in the most efficient and optimal way such as educational institute, better projects, more experience etc.Level parameter must be used.
+"""
 
+role_question_generator = """
+    As an HR manager, your task is to create a comprehensive mock test that assesses the problem-solving skills of candidates applying for a position at [Company Name]. The test will focus on evaluating their expertise in the key skills outlined in the job description.
+"""
+
+def question_generator(job_description):
+    return f"""
+        Job Description:
         {job_description}
 
-        Please use the provided resume data for each candidate to create 10 multiple-choice questions (MCQs) based on the specified fields in their resume. Each question should be designed to challenge the test taker's understanding and expertise in relevant technologies and experiences. Aim for a moderate difficulty level where the questions are not too easy but a bit challenging.
+        Imagine you are developing software and need to assess candidates' proficiency in various essential skills commonly used in the field. Your goal is to create a set of multiple-choice questions (MCQs) that focus on specific skills required for software development. These questions should evaluate candidates' ability to apply their knowledge effectively to practical scenarios.
 
-        Additionally, if the job is related to coding, please include one moderate coding question that tests the candidate's practical coding abilities.
+        For each skill, design a question that presents a real-world scenario or problem related to that skill. Create four options (A, B, C, D), with only one correct answer among them. The questions and options should be clear, concise, and aligned with the skill being assessed.
 
-        Each MCQ should have four options (A, B, C, D), with only one correct answer.
+        Instructions:
 
-        {resume_text}
-
-        Add a point in this to return the output in JSON format with the following fields:
-        - JSON Questions
-        - JSON Options
-        - JSON Answer
-"""
+        Choose specific skills relevant to software development, such as problem-solving, version control, database querying, algorithm complexity, code readability, debugging techniques, efficient code writing, unit testing, collaborative development, and code documentation.
+        Craft each question to challenge candidates' understanding and application of the selected skill.
+        Ensure that the questions clearly state the problem or scenario being presented.
+        Create plausible options for each question that represent different approaches or answers related to the skill being assessed.
+        Indicate the correct answer by labeling it accordingly (e.g., Option A, Option B).
+        Add one or two coding related questions also.
+        Remember, the aim is to create MCQs that accurately evaluate candidates' proficiency in specific skills within the software development domain. Focus on providing questions that reflect practical challenges and scenarios faced by software developers.
+        Please provide your response inside a list of dictionary with keys exactly same of the following format:("question", "(list of options)", "correct(correct option list index)") so that it helps extracting later using json.loads. Keys must be enclosed in doubleqoutes,not single.
+        """
 
 def resume_prompt_data():
     resume_text = []
@@ -260,25 +271,5 @@ def jd_prompt_creator(job_description):
 
 
 
-# Generating Questions Later
 
-def question_generator(job_description,resume_text):
-    return f"""
-        You are an HR manager conducting a mock test for evaluating candidates applying for a job at [Company Name]. The test will assess their knowledge and skills in line with the job description and their resume information. Below is the job description:
-
-        {job_description}
-
-        Please use the provided resume data for each candidate to create 10 multiple-choice questions (MCQs) based on the specified fields in their resume. Each question should be designed to challenge the test taker's understanding and expertise in relevant technologies and experiences. Aim for a moderate difficulty level where the questions are not too easy but a bit challenging.
-
-        Additionally, if the job is related to coding, please include one moderate coding question that tests the candidate's practical coding abilities.
-
-        Each MCQ should have four options (A, B, C, D), with only one correct answer.
-
-        {resume_text}
-
-        Add a point in this to return the output in JSON format with the following fields:
-        - JSON Questions
-        - JSON Options
-        - JSON Answer
-"""
     
