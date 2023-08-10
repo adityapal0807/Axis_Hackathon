@@ -8,6 +8,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path('dashboard/jd_description',views.jd_description_analyser,name='jd_description_analyser'),
     path("analyse_resumes", views.analyse_resumes, name="analyse_resumes"),
+    path("resume_rankings", views.ranked_resumes, name="resume_rankings"),
     path('JDProgress/<str:jd_id>',views.JD_Progress,name='jd_progress'),
 
     # API ROUTES

@@ -132,6 +132,7 @@ def analyse_resumes(request):
             # ranking the documents
 
             ranking_data = rank_resume(job_description,objects,)
+            request.session['ranking_data']= ranking_data
             print(ranking_data)
 
             #temporarily saving applied resume
@@ -152,30 +153,50 @@ def analyse_resumes(request):
                 obj1.save()
 
                 
-                email = rank['Person_Email_ID']
-                password =str(uuid.uuid4().int)[:10]
+                # email = rank['Person_Email_ID']
+                # password =str(uuid.uuid4().int)[:10]
 
-                # create an candidate account with this user
-                user = User.objects.create_user(email, email, password)
-                user.is_hr = False
-                user.save()
+                # # create an candidate account with this user
+                # user = User.objects.create_user(email, email, password)
+                # user.is_hr = False
+                # user.save()
 
                 
 
-                #send Email
-                candidate_login_credential(email,password)
+                # #send Email
+                # candidate_login_credential(email,password)
 
 
-                obj = TEST_CREDENTIALS(candidate_id = user,resume_id = obj1)
-                obj.save()
+                # obj = TEST_CREDENTIALS(candidate_id = user,resume_id = obj1)
+                # obj.save()
             
             # after this should redirect to new page with analysed resumes and their rankings
-        return render(request, 'hr/analyse_resumes.html',{
-            'objects':ranking_data,
-        })
+        return HttpResponseRedirect(reverse(ranked_resumes))
+        # return render(request, 'hr/analyse_resumes.html',{
+        #     'objects':ranking_data,
+        # })
     else:
         form= jd_submission_form()
         return render(request, 'hr/analyse_resumes.html', context={'form':form})
+
+def ranked_resumes(request):
+    if request.method=="POST":
+        try:
+            data = json.loads(request.body)
+            selected_emails = data.get('selected_emails', [])
+
+            # Process the selected email IDs here
+            # ...
+
+            print(selected_emails)
+        except:
+            print("data not recieved")
+            
+        return HttpResponseRedirect(reverse(jd_description_analyser))
+    else:
+        ranking_data=request.session.get('ranking_data')
+        ranking_data_json= json.dumps(ranking_data)
+        return render(request, "hr/resume_ranking.html", context={'ranking_data':ranking_data_json})
     
 def JD_Progress(request,jd_id):
     # load the jd

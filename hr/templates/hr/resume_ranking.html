@@ -1,0 +1,169 @@
+{% extends "hr/layout.html" %}
+
+{%block body%}
+
+
+    <div class="container">
+        
+        <form id="selection-form">
+            {%csrf_token%}
+            <div id="response-cards" class="row">
+                <!-- JavaScript will populate cards here -->
+            </div>
+
+            <div id="pagination" class="mt-4">
+                <!-- Pagination controls will be added here -->
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+        
+
+        
+    </div>
+
+    <script>
+        var jsonResponses = JSON.parse('{{ ranking_data|escapejs }}');
+        var responsesPerPage = 4;
+        var currentPage = 1;
+        var selectedEmails = [];
+
+        function generateCards() {
+            var startIndex = (currentPage - 1) * responsesPerPage;
+            var endIndex = Math.min(startIndex + responsesPerPage, jsonResponses.length);
+
+            var cardContainer = document.getElementById('response-cards');
+            cardContainer.innerHTML = '';
+
+            for (var i = startIndex; i < endIndex; i++) {
+                var response = jsonResponses[i];
+                var card = generateCard(response);
+                cardContainer.appendChild(card);
+            }
+        }
+
+        function generateCard(response) {
+            var card = document.createElement('div');
+            card.className = 'col-md-3 mb-4';
+
+            // Customize card content here
+            var cardContent = `
+                <div class="card" style=margin:2%>
+                    <div class="card-header">${response.Person_Email_ID}</div>
+                    <div class="card-body">
+                        <p>Rank: ${response.Rank}</p>
+                        <p>Level: ${response.level}</p>
+                        <p>Score: ${response.Score}</p>
+                        <input type="checkbox" name="selected_emails" value="${response.Person_Email_ID}" onclick="updateSelectedEmails(this)"><p>Select this candidate?</p>
+                        <br>
+                        <button class="btn btn-primary" style="margin:1%" onclick="showPage('summary', '${response.Short_Summary}')">Show Summary</button>
+                        <button class="btn btn-primary" style="margin:1%" onclick="showPage('reason', '${response.Reason}')">Show Reason</button>
+                    </div>
+                </div>
+            `;
+
+            card.innerHTML = cardContent;
+            return card;
+        }
+
+        function showPage(type, content) {
+            var pageContent = document.createElement('div');
+            pageContent.className = 'card';
+            
+            var pageTitle = (type === 'summary') ? 'Summary' : 'Reason';
+            var pageContentHtml = `<div class="card-header">${pageTitle}</div>`;
+            pageContentHtml += `<div class="card-body">${content}</div>`;
+            
+            pageContent.innerHTML = pageContentHtml;
+            
+            var cardContainer = document.getElementById('response-cards');
+            cardContainer.innerHTML = '';
+            cardContainer.appendChild(pageContent);
+        }
+
+        function updatePagination() {
+            var paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = '';
+
+            var totalPages = Math.ceil(jsonResponses.length / responsesPerPage);
+
+            if (totalPages > 1) {
+                var paginationHtml = `
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                `;
+
+                for (var page = 1; page <= totalPages; page++) {
+                    paginationHtml += `
+                        <li class="page-item${page === currentPage ? ' active' : ''}">
+                            <a class="page-link" href="#" onclick="changePage(${page})">${page}</a>
+                        </li>
+                    `;
+                }
+
+                paginationHtml += `
+                        </ul>
+                    </nav>
+                `;
+
+                paginationContainer.innerHTML = paginationHtml;
+            }
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            generateCards();
+            updatePagination();
+        }
+
+        function updateSelectedEmails(checkbox) {
+            if (checkbox.checked) {
+                selectedEmails.push(checkbox.value);
+            } else {
+                selectedEmails = selectedEmails.filter(email => email !== checkbox.value);
+            }
+        }
+
+        var selectionForm = document.getElementById('selection-form');
+        selectionForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (selectedEmails.length > 0) {
+                // Get the CSRF token from the hidden input field
+                var csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+                // Perform an AJAX POST request to your Django view
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '{% url "resume_rankings" %}', true);
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                xhr.setRequestHeader('X-CSRFToken', csrfToken); // Set the CSRF token
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Success
+                            // console.log(xhr.responseText);
+                        } else {
+                            // Error
+                            console.error('Error:', xhr.statusText);
+                        }
+                    }
+                };
+
+                var data = JSON.stringify({ 'selected_emails': selectedEmails });
+                xhr.send(data);
+
+                selectedEmails = []; // Reset selectedEmails after submission
+            }
+        });
+
+        // Call the function to generate initial cards and pagination controls
+        generateCards();
+        updatePagination();
+    </script>
+
+    <script>
+        var rankingData= JSON.parse('{{ ranking_data|escapejs }}');
+        console.log(typeof(rankingData))
+        
+    </script>
+{%endblock%}
