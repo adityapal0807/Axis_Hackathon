@@ -3,25 +3,28 @@
 {% block body %}
 
 <style>
+    body{
+        color: aliceblue;
+    }
+
     .row {
         display: flex;
+        flex-direction: row;
         justify-content: center;
         align-items: flex-start;
+    }
+
+    .col-md-6{
+        /* background-color: #219ebc; */
+        background-image: linear-gradient(to bottom, #2f3e46, #52796f);
+        border-radius: 5px;
+        padding: 3%;
     }
 </style>
 
 <div class="container-fluid mt-5">
     <div class="row">
-        <div class="col-md-6" id="analyse_details" style="display: none;">
-            <div class="analysed">
-                <p id="analyse_score"></p>
-                <p id="overall_review"></p>
-                <p id="pros"></p>
-                <p id="cons"></p>
-                <p id="suggestions"></p>
-            </div>
-        </div>
-        <div class="col-md-6" id="analyse_form_div">
+        <div class="col-md-6" id="analyse_form_div" style="margin: 2%;">
             <h2>Job Description Form</h2>
             <form method="post" action="">
                 {% csrf_token %}
@@ -45,11 +48,23 @@
                     <label for="aboutCompany">About the Company</label>
                     <textarea class="form-control" id="aboutCompany" name="aboutCompany" rows="5" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-outline-light">Submit</button>
             </form>
-            <button class="btn btn-primary" id="analyse_button">Analyse</button>
+            <br>
+            <button class="btn btn-outline-light" id="analyse_button">Analyse</button>
+        </div>
+
+        <div class="col-md-6" id="analyse_details" style="display: none; margin: 2%;">
+            <div class="analysed">
+                <p id="analyse_score"></p>
+                <p id="overall_review"></p>
+                <p id="pros"></p>
+                <p id="cons"></p>
+                <p id="suggestions"></p>
+            </div>
         </div>
     </div>
+<div>
     
     
 

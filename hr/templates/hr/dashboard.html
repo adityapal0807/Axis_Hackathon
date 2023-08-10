@@ -1,38 +1,52 @@
 {% extends 'hr/layout.html' %}
 
 {% block body %}
-<h1>DashBoard</h1>
-<div style="display: flex; flex-direction: row; justify-content: space-evenly;">
-    <div >
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">Create new JD</h5>
-              <p class="card-text">create a new job profile from scratch</p>
-              <a href="{% url 'jd_description_analyser' %}" class="btn btn-primary">Proceed</a>
+
+<div style="display: flex; flex-direction: col; justify-content: space-evenly; align-items: center;">
+  <div style="margin: 3%;">
+    <h1 style="color: aliceblue;">DashBoard</h1>
+  </div>
+
+  <div style="display: flex; flex-direction: row; justify-content:space-evenly; margin: 3%;">
+      <div style="margin: 1%;">
+          <div class="card" style="width: 18rem;  height: 12rem;">
+              <div class="card-body">
+                <h5 class="card-title">Create new JD</h5>
+                <p class="card-text">create a new job profile from scratch</p>
+                <a href="{% url 'jd_description_analyser' %}" class="btn btn-outline-light">Proceed</a>
+              </div>
             </div>
+      </div>
+      <div style="margin: 1%;">
+          <div class="card" style="width: 18rem; height: 12rem;">
+              <div class="card-body">
+                <h5 class="card-title">Analyse resumes</h5>
+                <p class="card-text">analyse resumes from given jd options</p>
+                <a href="{% url 'analyse_resumes' %}" class="btn btn-outline-light">Proceed</a>
+              </div>
           </div>
-    </div>
-    <div>
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">Analyse resumes</h5>
-              <p class="card-text">analyse resumes from given jd options</p>
-              <a href="{% url 'analyse_resumes' %}" class="btn btn-primary">Proceed</a>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title">Track Existing JD's</h5>
-              <p class="card-text">analyse resumes from given jd options</p>
-              <ul>
-                {% for jd in jds %}
-                  <li><a href="{% url 'jd_progress' jd.id %}" class="btn btn-primary">{{jd.jd_title}}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-        </div>
-    </div>
+      </div>
+      <div style="margin: 1%;">
+          <div class="card" style="width: 18rem;  height: 12rem;">
+              <div class="card-body">
+                <h5 class="card-title">Track Existing JD's</h5>
+                <p class="card-text">analyse resumes from given jd options</p>
+                <ul>
+                  {% for jd in jds %}
+                    <li><a href="{% url 'jd_progress' jd.id %}" class="btn btn-primary">{{jd.jd_title}}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
+
+<style>
+  .card{
+    background-image: linear-gradient(to bottom, #2f3e46, #52796f);
+    color: white;
+  }
+</style>
+
 {% endblock %}

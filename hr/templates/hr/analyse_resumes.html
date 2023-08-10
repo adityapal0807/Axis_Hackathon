@@ -1,17 +1,46 @@
 {% extends 'hr/layout.html' %}
 
 {%block body%}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <style>
+        #resumeDiv{
+            background-image: linear-gradient(to bottom, #2f3e46, #52796f);
+            color: white;
+            padding: 3%;
+            border-radius: 5px;
+        }
 
+    </style>
 
+    <div style="display: flex; align-items: center; justify-content: center; margin: 3%;">
+        <div id="resumeDiv" style="align-items: center; width: 60%; justify-content: center;  ">
+            <div>
+                <h1>Choose resumes</h1>
+            </div>
+            <div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div>
+                        <label for="dropdown_field">Select Job Description</label>
+                        {{ form.dropdown_field }}
+                    </div>
+                    <br>
+                    <div>
+                        <label for="pdf_files">Select resumes to analyse</label>
+                        {{ form.pdf_files }}
+                    </div>
+                    
+                    <br>
+                    <button type="submit" class="btn btn-outline-light">Submit</button>
+                </form>
+            </div> 
+        </div>
+    </div>
 
-    <div class="container">
+    
+
+    <!-- <div class="container">
         {% for object in objects %}
         <p>{{object}}</p>
         {% endfor %}
-    </div>
+    </div> -->
 {%endblock%}
