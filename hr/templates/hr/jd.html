@@ -3,29 +3,43 @@
 {% block body %}
 
 <style>
-    body{
-        color: aliceblue;
-    }
+    /* Add styles to format the boxes */
+.analysed {
+    margin: 2%;
+    padding: 10px;
+    background-color: #f8f9fa; /* Light grey background */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-    .row {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: flex-start;
-    }
+.score-box, .pros-box, .cons-box, .suggestions-box {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 
-    .col-md-6{
-        /* background-color: #219ebc; */
-        background-image: linear-gradient(to bottom, #2f3e46, #52796f);
-        border-radius: 5px;
-        padding: 3%;
-    }
+.score-box {
+    background-color: #f8f9fa; /* Light grey background */
+}
+
+.pros-box {
+    background-color: #d4edda; /* Light green background */
+}
+
+.cons-box {
+    background-color: #f8d7da; /* Light red background */
+}
+
+.suggestions-box {
+    background-color: #fff3cd; /* Light yellow background */
+}
+
 </style>
-
-<div class="container-fluid mt-5">
     <div class="row">
-        <div class="col-md-6" id="analyse_form_div" style="margin: 2%;">
+        <div class="col-md-7">
             <h2>Job Description Form</h2>
+            <hr>
             <form method="post" action="">
                 {% csrf_token %}
                 <div class="form-group">
@@ -48,24 +62,32 @@
                     <label for="aboutCompany">About the Company</label>
                     <textarea class="form-control" id="aboutCompany" name="aboutCompany" rows="5" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-outline-light">Submit</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </form>
             <br>
-            <button class="btn btn-outline-light" id="analyse_button">Analyse</button>
+            <button class="btn btn-success" id="analyse_button">Analyse</button>
         </div>
-
-        <div class="col-md-6" id="analyse_details" style="display: none; margin: 2%;">
+        <div class="col-md-5" id="response_box" style="display: none;">
+            <h2>Score</h2>
             <div class="analysed">
-                <p id="analyse_score"></p>
-                <p id="overall_review"></p>
-                <p id="pros"></p>
-                <p id="cons"></p>
-                <p id="suggestions"></p>
+                <div class="score-box">
+                    <h4>Score and Review</h4>
+                    <p id="analyse_score"></p>
+                    <p id="overall_review"></p>
+                </div>
+                <div class="pros-box">
+                    <h4>Pros</h4>
+                    <p id="pros"></p>
+                </div>
+                <div class="cons-box">
+                    <h4>Cons</h4>
+                    <p id="cons"></p>
+                </div>
+                <div class="suggestions-box">
+                    <h4>Suggestions</h4>
+                    <p id="suggestions"></p>
+                </div>
             </div>
         </div>
-    </div>
-<div>
-    
-    
-
+        
 {% endblock %}

@@ -1,7 +1,8 @@
-{% extends "hr/layout.html" %}
+{% extends "hr/candidate_layout.html" %}
 
 {% block body %}
 
+    <div class="container">
     <h2>Login Candidate</h2>
     <h2 style="color: red;">only for candidate</h2>
 
@@ -20,7 +21,5 @@
         </div>
         <input class="btn btn-primary" type="submit" value="Login">
     </form>
-
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
-
+</div>
 {% endblock %}

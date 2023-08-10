@@ -1,32 +1,25 @@
 {% extends "hr/layout.html" %}
 
 {%block body%}
-
-
-    <div class="container" >
-        
-        <form id="selection-form">
-            {%csrf_token%}
-            <div style="display: flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
-                <div id="response-cards" class="row" style="margin-top: 3%; display: flex; flex-direction: row; justify-content: space-between; color: aliceblue;">
-                    <!-- JavaScript will populate cards here -->
-                </div>
-    
-                <div id="pagination" class="mt-4">
-                    <!-- Pagination controls will be added here -->
-                </div>
-                <button type="submit" class="btn btn-outline-light" style="width: 18rem;">Submit</button>
+    <h2>Select Resumes</h2>
+    <form id="selection-form">
+        {%csrf_token%}
+        <div style="display: flex; flex-direction: column;">
+            <div id="response-cards" class="row" style="margin-top: 3%; display: flex; flex-direction: row; justify-content: space-between; color: aliceblue;">
+                <!-- JavaScript will populate cards here -->
             </div>
-            
-        </form>
-        
 
+            <div id="pagination" class="mt-4">
+                <!-- Pagination controls will be added here -->
+            </div>
+            <center><button type="submit" class="btn btn-success" style="width: 18rem;" type="submit">Submit</button></center>
+        </div>
         
-    </div>
+    </form>
 
     <script>
         var jsonResponses = JSON.parse('{{ ranking_data|escapejs }}');
-        var responsesPerPage = 4;
+        var responsesPerPage = 2;
         var currentPage = 1;
         var selectedEmails = [];
 
@@ -46,23 +39,22 @@
 
         function generateCard(response) {
             var card = document.createElement('div');
-            card.className = 'col-md-3 mb-4';
+            card.className = 'col-md-6 mb-4';
 
             // Customize card content here
             var cardContent = `
-                <div class="card" style="margin:1% ;width:18rem; height:25rem; background-image: linear-gradient(to bottom, #2f3e46, #52796f);">
+                <div class="card" style="margin:1% ;width:30rem; min-height:20rem; background-image: linear-gradient(to bottom, #2f3e46, #52796f);">
                     <div class="card-header">${response.Person_Email_ID}</div>
                     <div class="card-body">
                         <p>Rank: ${response.Rank}</p>
                         <p>Level: ${response.level}</p>
                         <p>Score: ${response.Score}</p>
                         <div style="display:flex; flex-direction:row; justify-content:space-evenly">
-                            <input type="checkbox" name="selected_emails" value="${response.Person_Email_ID}" onclick="updateSelectedEmails(this)">
-                            <h6><b>Select this candidate?</b></h6>
+                            <input class="form-control" type="checkbox" name="selected_emails" value="${response.Person_Email_ID}" onclick="updateSelectedEmails(this)" style="width:25px;">
+                            <h5><b>Select this candidate?</b></h5>
                         </div>
+                        <p>Reason: ${response.Reason}</p>
                         <br>
-                        <button class="btn btn-outline-light" style="margin:1%" onclick="showPage('summary', '${response.Short_Summary}')">Show Summary</button>
-                        <button class="btn btn-outline-light" style="margin:1%" onclick="showPage('reason', '${response.Reason}')">Show Reason</button>
                     </div>
                 </div>
             `;

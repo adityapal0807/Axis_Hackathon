@@ -151,20 +151,8 @@ def analyse_resumes(request):
                     resume_selected=False
                 )
                 obj1.save()
-
+        
                 
-                # email = rank['Person_Email_ID']
-                # password =str(uuid.uuid4().int)[:10]
-
-                # # create an candidate account with this user
-                # user = User.objects.create_user(email, email, password)
-                # user.is_hr = False
-                # user.save()
-
-                
-
-                # #send Email
-                # candidate_login_credential(email,password)
 
 
                 # obj = TEST_CREDENTIALS(candidate_id = user,resume_id = obj1)
@@ -186,13 +174,30 @@ def ranked_resumes(request):
             selected_emails = data.get('selected_emails', [])
 
             # Process the selected email IDs here
+            jd_id = Applied_resume.objects.get(applicant_email=str(selected_emails[0])).jd_id
+            for mail in selected_emails:
+                email = mail
+                password =str(uuid.uuid4().int)[:10]
+
+            # create an candidate account with this user
+                user = User.objects.create_user(email, email, password)
+                user.is_hr = False
+                user.save()
+
+            #send Email
+                candidate_login_credential(email,password)
+
+                obj1 = Applied_resume.objects.get(applicant_email=str(mail))
+
+                obj = TEST_CREDENTIALS(candidate_id = user,resume_id = obj1)
+                obj.save()
             # ...
 
             print(selected_emails)
         except:
             print("data not recieved")
             
-        return HttpResponseRedirect(reverse(jd_description_analyser))
+        return HttpResponseRedirect(reverse('index'))
     else:
         ranking_data=request.session.get('ranking_data')
         ranking_data_json= json.dumps(ranking_data)
@@ -205,8 +210,11 @@ def JD_Progress(request,jd_id):
 
     test_update = []
     for resume in applied_resumes:
-        obj = TEST_CREDENTIALS.objects.get(resume_id=resume)
-        test_update += [obj]
+        try:
+            obj = TEST_CREDENTIALS.objects.get(resume_id=resume)
+            test_update += [obj]
+        except:
+            continue
 
 
     return render(request,'hr/jd_progress.html',{
@@ -291,12 +299,10 @@ def candidate_test_window(request):
         obj.score = score
         obj.save()
 
-        
-        
+        logout(request.user)
         return HttpResponse(f'Your Score is {score} out of 10')
     else:
         # Generate questions here and store them in the session
-
         if obj.test_taken==True:
             return render(request,'hr/candidate_test.html',{
             'obj':resume_details,

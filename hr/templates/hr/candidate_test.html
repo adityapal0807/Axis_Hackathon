@@ -1,11 +1,33 @@
 {% extends 'hr/candidate_layout.html' %}
 
 {% block body %}
+<style>
+    .radio-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .ul{
+        list-style: none;
+    }
+
+    .radio-list li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        list-style: none;   
+    }
+
+    .radio-list input[type="radio"] {
+        margin-right: 5px;
+    }
+</style>
     <div class="container-fluid">
         Test is being taken here for this candidate
         {{request.user}}
         <div class="row">
             <div class="col-md-5">
+                <div class="welcome">
                 <h1>JD Description</h1>
 
                 <b>Job Title</b>
@@ -20,16 +42,15 @@
                 <p>{{job_description.requirements}}</p>
                 <b>About Company</b>
                 <p>{{job_description.about_company}}</p>
+            </div>
                 
             </div>
             <div class="col-md-7">
+                <div class="welcome">
                 {% if test_taken %}
                     <h1>Test already Taken</h1>
                     <p>You can't attempt this test again</p>
-
-                    <h1>Chatbot</h1>
-                    <hr>
-
+                    <p>You'll be notified on any update in the selection process by mail</p>
                 {% else %}
                 <hr>
                 <h1>Questions </h1>
@@ -40,16 +61,17 @@
                     {% for question in questions_json %}
                       <p>{{ question.question }}</p>
                       <ul>
-                        <li>{{ question.options.0 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="0"></li>
-                        <li>{{ question.options.1 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="1"></li>
-                        <li>{{ question.options.2 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="2"></li>
-                        <li>{{ question.options.3 }} <input type="radio" name="question_{{ forloop.counter0 }}" value="3"></li>
+                        <li><input type="radio" id="question_{{ forloop.counter0 }}_0" name="question_{{ forloop.counter0 }}" value="0"><label for="question_{{ forloop.counter0 }}_0">{{ question.options.0 }}</label></li>
+                        <li><input type="radio" id="question_{{ forloop.counter0 }}_1" name="question_{{ forloop.counter0 }}" value="1"><label for="question_{{ forloop.counter0 }}_1">{{ question.options.1 }}</label></li>
+                        <li><input type="radio" id="question_{{ forloop.counter0 }}_2" name="question_{{ forloop.counter0 }}" value="2"><label for="question_{{ forloop.counter0 }}_2">{{ question.options.2 }}</label></li>
+                        <li><input type="radio" id="question_{{ forloop.counter0 }}_3" name="question_{{ forloop.counter0 }}" value="3"><label for="question_{{ forloop.counter0 }}_3">{{ question.options.3 }}</label></li>
                       </ul>
                     {% endfor %}
-                    <button type="submit" id="submit-button">Submit</button>
+                    <button type="submit" id="submit-button" class="btn btn-success">Submit</button>
                   </form>
                 <hr>
                 {% endif %}
+            </div>
             </div>
         </div>
         
