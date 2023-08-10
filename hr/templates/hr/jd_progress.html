@@ -20,22 +20,30 @@
                 
             </div>
             <div class="col-md-5">
-                <h1>applied_resumes</h1>
+                <div class="welcome">
+                    <h1>Applied_resumes</h1>
                 <p>Details about list of names of applied resumes over here</p>
                 <ul>
                     {% for a in applied_resumes %}
-                    <li>{{a.applicant_email}}</li>
+                    <li><b>{{a.applicant_email}}</b></li>
                     {% endfor %}
                 </ul>
+                </div>
                 <hr>
-                <h1>Candidates Progress Till Now</h1>
-                <ul>
-                    {% for a in test_updates %}
-                    <li>{{a.resume_id.applicant_email}}   -   {{a.test_taken}}   -   {{a.score }}</li>
+                <div class="welcome">
+                    <h1>Shortlisted Candidates</h1>
+                    <ul>
+                        {% for a in test_updates %}
+                        {% if a.score is not None %}
+                            <li>{{ a.resume_id.applicant_email }} - {{ a.test_taken }} - {{ a.score }}</li>
+                        {% else %}
+                            <li style="color: red;"><b>{{ a.resume_id.applicant_email }} - Test Not Taken Yet</b></li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
+                </div>
             </div>
         </div>
     </div>
-    {{applied_resumes}}
+    
 {%endblock%}

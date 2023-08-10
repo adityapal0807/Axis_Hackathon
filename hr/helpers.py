@@ -190,7 +190,7 @@ def generate_questions(job_description,model_name='gpt-3.5-turbo',temperature=0.
         return {'Error':response_data}
     
 def candidate_login_credential(email,password):
-    subject = 'Forget Password Link'
+    subject = 'Test Credentials - Do Not Share!!'
     message = f""" 
         Hi {email},
 
@@ -200,7 +200,9 @@ def candidate_login_credential(email,password):
         Password : {password}
 
         If you did not make this request then please ignore this email.
-        http://127.0.0.1:8000/candidate/test
+
+        Start your Test Here:
+        http://127.0.0.1:8000/candidate/
 
         """
     email_from = settings.EMAIL_HOST_USER

@@ -81,38 +81,16 @@
             </div>
           </nav>
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-3" style="height: auto;padding-left: 3%;padding-right: 3%;">
-              <div class="welcome">
-                <div class="info">
-                  <h1 style="font-family: Helvetica Neue;">Dashboard</h1>
-                  <hr>
-                  <h3 style="font-family: Helvetica Neue;">HR Info</h3>
-                  <hr>
-                  <div style="text-align:right; margin:0px auto 0px auto;">
-                    <div style="display: flex; justify-content: center; align-items: center; height: 200px;">
-                      <img src="{% static 'hr\hr-manager.png' %}" alt="Centered Image" style="max-height: 80%; max-width: 80%;">
-                    </div>
-                    <p>Name : <b>{{request.user.username}}</b></p>
-
-                    <p>Job Descriptions Till Now: <b id="pdf_count">1</b></p>
-                    <p>Resumes Analysed Till Now: <b id="pdf_count">2</b></p>
-                    <p>Account Created at <b>{{request.user.date_joined}}</b></p>
-                    
-                  </div>
-                  <hr>
-                </div>
-              </div>
+          
+        <div>
+            <div class="welcome">
+            {% block body %}
+            
+            {% endblock %}
             </div>
-            <div class="col-md-9">
-              <div class="welcome">
-              {% block body %}
-              
-              {% endblock %}
-            </div>
-            </div>
-          </div>
         </div>
+        </div>
+        
     </body>
 
     <style> 
