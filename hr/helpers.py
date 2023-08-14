@@ -211,6 +211,15 @@ def candidate_login_credential(email,password):
     return True
 
 
+def convert_audio_to_text(audio_file):
+    audio_content = audio_file.read()
+
+    # Transcribe the audio using OpenAI's Whisper ASR API
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    transcription = openai.Audio.transcribe("whisper-1", file=audio_content)
+    return transcription
+
+
     
     
     
