@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from django.core import serializers
 import json
 import os
-from .helpers import jd_suggestor,convert_to_text,resume_scorer,rank_resume,candidate_login_credential,generate_questions
+from .helpers import jd_suggestor,convert_to_text,resume_scorer,rank_resume,candidate_login_credential,generate_questions,convert_audio_to_text
 from .forms import *
 from .models import User,Job_Description,Applied_resume
 import uuid
@@ -318,6 +318,23 @@ def candidate_test_window(request):
                 'job_description':job_description,
                 'questions_json':questions_json
             })
+        
+
+def candidate_audio(request):
+    return render(request,'hr/face_audio.html')
+
+@csrf_exempt
+def transcribe(request):
+    if request.method == 'POST' and request.FILES.get('audio_file'):
+        import openai
+        audio_file = request.FILES['audio_file']
+        print(audio_file)
+        # Transcribe the audio using OpenAI's Whisper ASR API
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+        transcription = openai.Audio.transcribe("whisper-1", file=audio_file)
+        print(transcription)
+        
+        return JsonResponse({'file':transcription},safe=False)
     
 
     

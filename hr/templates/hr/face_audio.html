@@ -1,0 +1,16 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera and Audio Recording</title>
+</head>
+<body>
+    <h1>Camera and Audio Recording</h1>
+    <video id="cameraFeed" autoplay></video>
+    <button id="startRecording">Start Recording</button>
+    <button id="stopRecording" disabled>Stop Recording</button>
+    <audio id="audioRecording" controls></audio>
+    <script src="{% static 'hr/record.js' %}"></script>
+</body>
+</html>
