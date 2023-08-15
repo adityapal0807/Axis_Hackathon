@@ -1,16 +1,90 @@
+{% extends 'hr/candidate_layout.html' %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Camera and Audio Recording</title>
-</head>
-<body>
-    <h1>Camera and Audio Recording</h1>
-    <video id="cameraFeed" autoplay></video>
-    <button id="startRecording">Start Recording</button>
-    <button id="stopRecording" disabled>Stop Recording</button>
-    <audio id="audioRecording" controls></audio>
-    <script src="{% static 'hr/record.js' %}"></script>
-</body>
-</html>
+{% block body %}
+
+<div class="container-fluid">
+    Test is being taken here for this candidate
+    {{request.user}}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="welcome">
+            <h1>JD Description</h1>
+
+            <b>Job Title</b>
+            <p>{{job_description.job_title}}</p>
+            <b>Skills</b>
+            <p>{{job_description.skills}}</p>
+            <b>Responsibilities</b>
+            <p>{{job_description.responsibilities}}</p>
+            <b>Responsibilities</b>
+            <p>{{job_description.responsibilities}}</p>
+            <b>Requirements</b>
+            <p>{{job_description.requirements}}</p>
+            <b>About Company</b>
+            <p>{{job_description.about_company}}</p>
+        </div>
+            
+        </div>
+        <div class="col-md-8">
+            <div class="welcome">
+            {% if message %}
+                <p>Test submitted Successfully</p>
+            {% else %}
+            {% if test_taken %}
+                <h1>Test already Taken</h1>
+                <p>You can't attempt this test again</p>
+                <p>You'll be notified on any update in the selection process by mail</p>
+            {% else %}
+            
+            <h3>Problem Handling Round</h3>
+            <hr>
+                <h5>Problem Statement : </h5>
+                <div class="ml-2">
+                <b style="padding: 3%;">""{{situation.problem_statement}}""</b><br>
+            </div>
+                <div class="ml-4">
+                <small>the test will start as soon as the link loads and will be provide a 15 seconds buffer to prepare a response</small><br>
+                <small>provide a straight forward answer within the time limit of <span style="color: red;">45 Seconds or less</span></small><br>
+                <small>u will not be able to reoload or record the response again</small>
+                </div>
+                <center><video id="cameraFeed" autoplay></video></center><br>
+
+                <button id="startRecording" class="btn btn-success">Start Recording</button>
+                <button id="stopRecording" disabled class="btn btn-danger">Stop Recording</button><br>
+                <audio id="audioRecording" controls></audio>
+                <script src="{% static 'hr/record.js' %}"></script>
+                
+                {% if test_taken %}
+                <h1>Test already Taken</h1>
+                <p>You can't attempt this test again</p>
+                <p>You'll be notified on any update in the selection process by mail</p>
+                {% else %}
+                
+                <form action="{% url 'candidate_audio' %}" method="post" id="response_form">
+                    <input type="text" name="situation" id="situation"   value="{{situation.problem_statement}}">
+                    <input type="text" name="expected" id="expected"  value="{{situation.expected_answer}}">
+                    <input type="text" name="answer" id="response" >
+                    <center><button type="submit" class="btn btn-primary">Submit</button></center>
+                </form>
+                
+                {% endif %}
+                
+                        <hr>
+            {% endif %}
+            {% endif %}
+        </div>
+        </div>
+    </div>
+    
+    
+    
+    
+
+
+</div>
+
+
+    
+{% endblock %}

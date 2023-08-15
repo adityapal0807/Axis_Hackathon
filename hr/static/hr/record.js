@@ -47,6 +47,10 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                     .then(response => response.json())
                     .then(data => {
                         console.log('Audio uploaded successfully:', data);
+                        var response = document.getElementById('response')
+                        console.log(data.response_recorded)
+                        response.value = data.response_recorded.text
+                        
                     })
                     .catch(error => {
                         console.error('Error uploading audio:', error);
@@ -77,3 +81,5 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 } else {
     console.error('getUserMedia is not supported');
 }
+
+
