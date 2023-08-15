@@ -41,7 +41,7 @@ class Applied_resume(BaseFields):
     resume_rank= models.IntegerField(null=True, blank=True)
     resume_level= models.CharField(max_length=100, choices=CHOICES_LEVEL)
     resume_summary= models.TextField(max_length=2000)
-    resume_rank_reason= models.CharField(max_length= 1000, null= True, blank=True)
+    resume_rank_reason= models.TextField(max_length= 1000, null= True, blank=True)
     resume_selected=models.BooleanField(default=False)
     def _str_(self):
         return f"{self.jd_id} - {self.applicant_email}"
@@ -50,7 +50,11 @@ class TEST_CREDENTIALS(BaseFields):
     candidate_id = models.ForeignKey(User,on_delete=models.CASCADE,related_name='candidate_id')
     resume_id = models.ForeignKey(Applied_resume,on_delete=models.CASCADE,related_name='applied_resume')
     test_taken = models.BooleanField(default=False)
-    score = models.FloatField(null=True, blank=True)
+    test_score = models.FloatField(null=True, blank=True)
+    audio_question = models.TextField(null=True,blank=True)
+    response = models.TextField(null=True,blank=True)
+    response_score = models.IntegerField(null=True,blank=True)
+
 
 class Chat(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
@@ -59,3 +63,5 @@ class Chat(models.Model):
 
     def __str__(self):
         return f'{self.sender.username} to {self.receiver.username}: {self.content}'
+    
+

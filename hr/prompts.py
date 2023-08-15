@@ -265,10 +265,48 @@ def jd_prompt_creator(job_description):
         {job_description}
 
         Provide me an Overall Score , Overall Review, Strong Points For my JD, Weak points for existing Job Description in short and suggest some insighfull changes that can help attract great talent.
-        Please provide your response inside a dictionary with keys exactly same of the following format:('Overall Score', 'Overall Review', 'Pros','Cons','Suggestions(list of suggestions)']
+        Please provide your response inside a dictionary with keys exactly same of the following format:('Overall Score', 'Overall Review', 'Pros','Cons','Suggestions(list of suggestions)')
 
     """
 
+role_situation = """
+    I am an advanced AI-driven Situational Question Generator specializing in assisting HR teams and hiring managers in evaluating job candidates effectively. With my deep understanding of job roles, industry trends, and the nuances of effective communication, I create tailored situational questions that gauge a candidate's responses to relevant work scenarios, specifically designed to assess their problem-solving skills. My goal is to help you identify candidates who not only meet the job requirements but also possess the problem-solving and critical-thinking skills essential for success in your organization.
+
+    Through careful analysis of the provided job description, I craft situational questions that accurately reflect the challenges and responsibilities associated with the role. Each question is designed to assess a candidate's ability to navigate real-world situations, handle problems, make informed decisions, and showcase their expertise. The scenarios I create are carefully balanced to maintain a moderate difficulty level, ensuring that candidates are challenged while remaining within the scope of the job requirements.
+
+    By using my situational questions during interviews or assessments, you can gain valuable insights into how candidates approach and resolve job-related challenges. You'll be able to assess their thought processes, problem-solving capabilities, communication skills, adaptability, and alignment with your company's values and goals. I'm here to support your hiring process by providing a structured and consistent way to evaluate candidates, ultimately helping you build a high-performing and cohesive team.
+
+    Partner with me to enhance your candidate evaluation process and identify top talent that not only meets the job description but also demonstrates the potential to excel and thrive within your organization.
+"""
+
+def create_situation(job_description):
+    return f"""
+        Job Description 
+        {job_description}
+
+        Given the job description provided, please generate a situational question that assesses a candidate's problem-handling skills and response to a relevant work scenario. The question should be moderate in difficulty and strictly aligned with the job requirements. Consider a situation where the candidate needs to demonstrate problem-solving skills, decision-making abilities, and an understanding of the role's responsibilities and challenges."
+        Feel free to utilize these updated versions of the role description and prompt to effectively communicate the emphasis on testing the problem-handling skills of the candidate.
+        Also Create an expected profound answer to the question which can later be used for scoring candidate's response.
+        Keep the situation to a one to two liner response ie not a much broader answered situation.
+        Please provide your response inside a dictionary with keys exactly same of the following format:('problem_statement(contains the problem statement)', 'expected_answer')
+    """
+
+def analyse_situational_answer(situation,expected_answer,candidate_answer):
+    return f"""
+        Situational Question
+        {situation}
+
+        Expected Answer
+        {expected_answer}
+
+        Candidate Answer
+        {candidate_answer}
+
+        Given the Situational Question and expected answer provided, please evaluate the candidate answer to the  situational question that assesses a candidate's problem-handling skills and response to a relevant work scenario. 
+        Feel free to utilize these updated versions of the role description and prompt to effectively communicate the emphasis on testing the problem-handling skills of the candidate.
+        Also Create an expected profound score out of 10 to the question which can later be used for scoring candidate's response.
+        Please provide your response inside a dictionary with keys exactly same of the following format:('score')
+    """
 
 
 

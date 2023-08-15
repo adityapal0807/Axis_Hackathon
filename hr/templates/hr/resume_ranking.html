@@ -139,6 +139,7 @@
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             // Success
+                            console.log('sdkjvbs');
                             // console.log(xhr.responseText);
                         } else {
                             // Error
@@ -148,6 +149,7 @@
                 };
 
                 var data = JSON.stringify({ 'selected_emails': selectedEmails });
+                console.log(data);
                 xhr.send(data);
 
                 selectedEmails = []; // Reset selectedEmails after submission

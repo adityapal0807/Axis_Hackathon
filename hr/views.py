@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from django.core import serializers
 import json
 import os
-from .helpers import jd_suggestor,convert_to_text,resume_scorer,rank_resume,candidate_login_credential,generate_questions,convert_audio_to_text
+from .helpers import jd_suggestor,convert_to_text,resume_scorer,rank_resume,candidate_login_credential,generate_questions,generate_situation,candidate_situation_answer
 from .forms import *
 from .models import User,Job_Description,Applied_resume
 import uuid
@@ -169,33 +169,32 @@ def analyse_resumes(request):
 
 def ranked_resumes(request):
     if request.method=="POST":
-        try:
-            data = json.loads(request.body)
-            selected_emails = data.get('selected_emails', [])
+        
+        data = json.loads(request.body)
+        selected_emails = data.get('selected_emails', [])
 
-            # Process the selected email IDs here
-            jd_id = Applied_resume.objects.get(applicant_email=str(selected_emails[0])).jd_id
-            for mail in selected_emails:
-                email = mail
-                password =str(uuid.uuid4().int)[:10]
+        # Process the selected email IDs here
+        jd_id = Applied_resume.objects.get(applicant_email=str(selected_emails[0])).jd_id
+        for mail in selected_emails:
+            email = mail
+            password =str(uuid.uuid4().int)[:10]
 
-            # create an candidate account with this user
-                user = User.objects.create_user(email, email, password)
-                user.is_hr = False
-                user.save()
+        # create an candidate account with this user
+            user = User.objects.create_user(email, email, password)
+            user.is_hr = False
+            user.save()
 
-            #send Email
-                candidate_login_credential(email,password)
+        #send Email
+            candidate_login_credential(email,password)
 
-                obj1 = Applied_resume.objects.get(applicant_email=str(mail))
+            obj1 = Applied_resume.objects.get(applicant_email=str(mail))
 
-                obj = TEST_CREDENTIALS(candidate_id = user,resume_id = obj1)
-                obj.save()
-            # ...
+            obj = TEST_CREDENTIALS(candidate_id = user,resume_id = obj1)
+            obj.save()
+        # ...
 
-            print(selected_emails)
-        except:
-            print("data not recieved")
+        print(selected_emails)
+    
             
         return HttpResponseRedirect(reverse('index'))
     else:
@@ -290,17 +289,15 @@ def candidate_test_window(request):
         correct_answers = [question['correct'] for question in questions_json]
         
         score = sum(user_answer == str(correct_answer) for user_answer, correct_answer in zip(user_answers, correct_answers))
-        score = float((score * 100)/ len(correct_answers))
+        
         
         # Clear the stored questions from the session
         del request.session['questions']
 
-        obj.test_taken = True
-        obj.score = score
+        obj.test_score = score
         obj.save()
 
-        logout(request.user)
-        return HttpResponse(f'Your Score is {score} out of 10')
+        return HttpResponseRedirect('candidate_audio')
     else:
         # Generate questions here and store them in the session
         if obj.test_taken==True:
@@ -320,21 +317,66 @@ def candidate_test_window(request):
             })
         
 
+@csrf_exempt
+@login_required
 def candidate_audio(request):
-    return render(request,'hr/face_audio.html')
+    current_user = request.user
+    obj = TEST_CREDENTIALS.objects.get(candidate_id=current_user)
+
+    resume = obj.resume_id
+    job_description = obj.resume_id.jd_id.job_description
+
+    if request.method == 'POST':
+        answer = request.POST['answer']
+        problem_statement = request.POST['situation']
+        expected_answer = request.POST['expected']
+
+        response = candidate_situation_answer(situation=problem_statement,expected_answer=expected_answer,candidate_answer=answer)
+
+        print(response)
+
+        obj.test_taken = True
+        obj.audio_question = problem_statement
+        obj.response = answer
+        obj.response_score = response['score']
+
+        obj.save()
+
+        return render(request,'hr/face_audio.html',{
+            'job_description':job_description,
+            'message':"Somethin'"
+        })
+    else: 
+        situation = generate_situation(job_description=job_description)
+        # problem_statement = situation['problem_statement']
+        # expected_answer = situation['expected_answer']
+
+        if obj.test_taken == 'True':
+            return render(request,'hr/face_audio.html',{
+                'test_taken':'True',
+                'situation':situation,
+                'job_description':job_description,
+            })
+        return render(request,'hr/face_audio.html',{
+                'situation':situation,
+                'job_description':job_description,
+            })
 
 @csrf_exempt
+@login_required
 def transcribe(request):
     if request.method == 'POST' and request.FILES.get('audio_file'):
         import openai
         audio_file = request.FILES['audio_file']
         print(audio_file)
-        # Transcribe the audio using OpenAI's Whisper ASR API
+        transcription = ''
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        transcription = openai.Audio.transcribe("whisper-1", file=audio_file)
-        print(transcription)
+        audio_file1= open("hr\static\hr\output.mp3", "rb")
+        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        # transcription = openai.Audio.transcribe("whisper-1", file=audio_file)
+        print(transcript)
         
-        return JsonResponse({'file':transcription},safe=False)
+        return JsonResponse({'response_recorded':transcript},safe=False)
     
 
     

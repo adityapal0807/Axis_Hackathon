@@ -1,36 +1,121 @@
-{% extends "hr/layout.html" %}
+{% load static %}
 
-{% block body %}
-
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
-    <div class="card" style="margin-top: 3%;">
-        <div style="padding: 2%;">
-            <h2>Register</h2>
-        </div>
-
-        <div style="padding: 2%;">
-            <form action="{% url 'register' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <input class="form-control" type="email" name="email" placeholder="Email Address">
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Mail{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'hr/styles.css' %}">
+        <link rel="icon" href="{% static 'hr\hr-manager.png' %}" type="image/x-icon">
+        {% block script %}
+        {% endblock %}
+    </head>
+    <style>
+        .options{
+            padding: 10%;
+        }
+        .details_list li{
+            list-style-type: none;
+        }
+        .brand{
+          padding: 15px;
+        }
+        .container-fluid{
+          padding: 2%; 
+        }
+        .welcome{
+          border: 1px solid #ccc!important;border-radius: 16px;
+          width: auto;
+          padding: 3%;
+        }
+        .welcome2{
+          border: 1px solid #ccc!important;border-radius: 16px;
+          height: auto;
+          padding: 20px;
+        }
+        .content_stats{
+          margin-top: 2%;
+          border: 1px solid #ccc!important;border-radius: 16px;
+          height: auto;
+          padding: 20px;
+        }
+        .card{
+          border: none;
+          box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+          transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+        }
+        .card:hover{
+          transform: scale(1.05);
+        }
+        .profile_card{
+          border: 1px solid #ccc!important;border-radius: 10px;
+          height: 100px;
+          width: 100%;
+        }
+        .profile_card_1{
+          border: 1px solid #ccc!important;border-radius: 10px;
+          height: 50px;
+          width: 100%;
+        }
+    </style>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="#">
+            <img src="{% static 'hr\hr-manager.png' %}" width="50" height="50" alt="">
+          </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"><img src="{% static 'hr\hr-manager.png' %}" alt=""></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="{%url 'index'%}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% endif%}
+              </ul>
+            </div>
+          </nav>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-1" style="height: auto;"></div>
+            <div class="col-md-10">
+              <div class="welcome">
+                <div style="padding: 2%;">
+                    <h1>Register</h1>
+                    <form action="{% url 'register' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input class="form-control" type="email" name="email" placeholder="Email Address">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Register">
+                    </form>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="password" placeholder="Password">
+        
+                <div style="padding: 2%;">
+                    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
-                </div>
-                <input class="btn btn-primary" type="submit" value="Register">
-            </form>
+            </div>
+            </div>
+            </div>
+          </div>
         </div>
+    </body>
 
-        <div style="padding: 2%;">
-            Already have an account? <a href="{% url 'login' %}">Log In here.</a>
-        </div>
-    </div>
+    <style> 
+    </style>
 
+    <script src="{% static 'hr/script.js' %}"></script>
 
-{% endblock %}
+</html>
+

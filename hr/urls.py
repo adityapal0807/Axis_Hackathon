@@ -17,6 +17,6 @@ urlpatterns = [
     #candidate
     path('candidate',views.candidate_login,name='candidate_login'),
     path('candidate/test',views.candidate_test_window,name='candidate_test_window'),
-    path('candidate_audio',views.candidate_audio,name='candidate_audio'),
+    path('candidate/candidate_audio',views.candidate_audio,name='candidate_audio'),
     path('transcribe_audio',views.transcribe,name='transcribe')
 ]

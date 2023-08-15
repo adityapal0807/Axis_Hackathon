@@ -34,8 +34,14 @@
                     <h1>Shortlisted Candidates</h1>
                     <ul>
                         {% for a in test_updates %}
-                        {% if a.score is not None %}
-                            <li>{{ a.resume_id.applicant_email }} - {{ a.test_taken }} - {{ a.score }}</li>
+                        {% if a.test_taken %}
+                        
+                        <li><h5>{{ a.resume_id.applicant_email }}</h5></li>
+                        <ul>
+                            <li>TEST STATUS - {{ a.test_taken }}</li>
+                            <li>MCQ's Score - {{ a.test_score }} / 10</li>
+                            <li>Situtation Score - {{ a.response_score }} / 10</li>
+                        </ul>
                         {% else %}
                             <li style="color: red;"><b>{{ a.resume_id.applicant_email }} - Test Not Taken Yet</b></li>
                         {% endif %}
